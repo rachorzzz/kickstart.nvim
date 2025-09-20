@@ -683,6 +683,23 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        ansiblels = {
+          settings = {
+            ansible = {
+              python = {
+                interpreterPath = "python3"
+              },
+              ansibleLint = {
+                enabled = true,
+                path = "ansible-lint"
+              },
+              executionEnvironment = {
+                enabled = false
+              }
+            }
+          },
+          filetypes = { "yaml.ansible" }
+        },
         pylsp = {
           settings = {
             pylsp = {
@@ -731,6 +748,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'ansible-language-server', -- Ansible LSP
+        'ansible-lint', -- Ansible linter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -918,7 +937,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'yaml' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -953,6 +972,16 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+
+  -- Ansible file detection and enhanced support
+  {
+    'mfussenegger/nvim-ansible',
+    ft = { 'yaml', 'yml' },
+    config = function()
+      -- This plugin automatically detects Ansible files and sets filetype to yaml.ansible
+      -- based on directory structure (roles/, playbooks/, etc.) and file patterns
+    end,
+  },
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

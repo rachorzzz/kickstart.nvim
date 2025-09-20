@@ -239,3 +239,45 @@ sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim
 ```
 </details>
 
+
+
+
+## Using with Docker
+
+You can run this Neovim configuration inside a container. This is handy on macOS or Linux when you want an isolated, reproducible setup without touching your host config.
+
+Build the image (from the repo root):
+
+```bash
+docker build -t kickstart-nvim .
+```
+
+Open Neovim on your current project directory:
+
+```bash
+# From the project you want to edit
+docker run --rm -it \
+  -v "$PWD":/workspace \
+  -w /workspace \
+  kickstart-nvim .
+```
+
+Persist Neovim caches/plugins across runs (recommended for faster startup after first run):
+
+```bash
+# Create a volume once
+docker volume create nvim-state
+
+# Use it for subsequent runs
+docker run --rm -it \
+  -v "$PWD":/workspace \
+  -v nvim-state:/root \
+  -w /workspace \
+  kickstart-nvim .
+```
+
+Notes:
+- Clipboard: containerized Neovim may not access your macOS system clipboard by default. Consider using a terminal with OSC52 clipboard support (e.g., iTerm2/WezTerm/Kitty) and an OSC52 plugin, or copy/paste via terminal shortcuts.
+- Nerd Fonts: if your terminal uses a Nerd Font, set `vim.g.have_nerd_font = true` in `init.lua` for icons.
+- Updates: rebuild with `docker build --no-cache -t kickstart-nvim .` to pick up config changes.
+- Override entrypoint: you can drop into a shell with `docker run --rm -it kickstart-nvim bash`.

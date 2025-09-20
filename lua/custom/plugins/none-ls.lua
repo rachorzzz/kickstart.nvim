@@ -19,6 +19,7 @@ return {
         'shfmt', -- Shell formatter
         'checkmake', -- linter for Makefiles
         'ruff', -- Python linter and formatter
+        'ansible-lint', -- Ansible linter
       },
       -- auto-install configured formatters & linters (with null-ls)
       automatic_installation = true,
@@ -26,6 +27,9 @@ return {
 
     local sources = {
       diagnostics.checkmake,
+      diagnostics.ansiblelint.with {
+        filetypes = { 'yaml.ansible' },
+      },
       formatting.prettier.with { filetypes = { 'html', 'json', 'yaml', 'markdown' } },
       formatting.stylua,
       formatting.shfmt.with { args = { '-i', '4' } },
