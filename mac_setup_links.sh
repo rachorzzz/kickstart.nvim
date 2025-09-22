@@ -4,7 +4,7 @@
 # This script creates symlinks from this repository to the standard config locations
 
 set -e
-
+brew install --cask font-0xproto-nerd-font
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Setting up configuration symlinks..."

@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -298,7 +298,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -379,7 +379,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -487,7 +487,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -687,18 +687,18 @@ require('lazy').setup({
           settings = {
             ansible = {
               python = {
-                interpreterPath = "python3"
+                interpreterPath = 'python3',
               },
               ansibleLint = {
                 enabled = true,
-                path = "ansible-lint"
+                path = 'ansible-lint',
               },
               executionEnvironment = {
-                enabled = false
-              }
-            }
+                enabled = false,
+              },
+            },
           },
-          filetypes = { "yaml.ansible" }
+          filetypes = { 'yaml.ansible' },
         },
         pylsp = {
           settings = {
@@ -747,9 +747,9 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        'stylua',                  -- Used to format Lua code
         'ansible-language-server', -- Ansible LSP
-        'ansible-lint', -- Ansible linter
+        'ansible-lint',            -- Ansible linter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
