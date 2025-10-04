@@ -1013,6 +1013,9 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
+  rocks = {
+    enabled = false, -- Disable luarocks support to avoid Lua version conflicts
+  },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

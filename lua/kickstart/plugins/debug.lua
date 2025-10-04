@@ -96,7 +96,7 @@ return {
 			ensure_installed = {
 				-- Update this to ensure that you have the debuggers for the langs you want
 				'delve',
-				'python',
+				'debugpy',
 			},
 		}
 
@@ -146,6 +146,40 @@ return {
 				detached = vim.fn.has 'win32' == 0,
 			},
 		}
-		require('dap-python').setup()
+
+		-- Python DAP setup with system detection
+		local function setup_python_dap()
+			-- Try to find python executable
+			local python_path = vim.fn.exepath('python3') or vim.fn.exepath('python')
+			
+			if python_path == '' then
+				vim.notify('Python not found in PATH. Python debugging will not be available.', vim.log.levels.WARN)
+				return
+			end
+
+			-- Setup dap-python with detected python path
+			local ok, dap_python = pcall(require, 'dap-python')
+			if not ok then
+				vim.notify('nvim-dap-python not available', vim.log.levels.WARN)
+				return
+			end
+
+			dap_python.setup(python_path)
+			
+			-- Verify debugpy is available
+			vim.defer_fn(function()
+				local handle = io.popen(python_path .. ' -c "import debugpy; print(debugpy.__version__)" 2>/dev/null')
+				local version = handle and handle:read('*a'):gsub('%s+', '') or ''
+				if handle then handle:close() end
+				
+				if version ~= '' then
+					vim.notify('Python debugging ready (debugpy v' .. version .. ')', vim.log.levels.INFO)
+				else
+					vim.notify('debugpy not found. Install with: ' .. python_path .. ' -m pip install debugpy', vim.log.levels.WARN)
+				end
+			end, 100)
+		end
+
+		setup_python_dap()
 	end,
 }
